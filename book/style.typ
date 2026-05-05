@@ -8,7 +8,6 @@
     let headings = query(heading.where(level: 1)).filter(it => it.location().page() == page)
     if headings.len() > 0 { headings.first().body }
 }
-
 #let setup(it) = {
     set page(
         paper: "a4",
@@ -36,10 +35,10 @@
         spacing: 1.05em,
         first-line-indent: (amount: 2em, all: true),
     )
-    set heading(numbering: "1.1.1.1")
-    show heading: it => block(it.body)
+    set heading(numbering: "1.1.1.1.1.1.1")
     show heading.where(level: 1): pagebreak() + []
     set underline(stroke: .05em, offset: .3em, evade: true)
     show link: underline
+    set list(marker: text(size: 9pt, sym.circle.filled), body-indent: 1em)
     it
 }
