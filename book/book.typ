@@ -25,3 +25,4 @@
 #include "ch1.typ"
 #include "ch2.typ"
 #include "ch3.typ"
+#include "ch4.typ"
