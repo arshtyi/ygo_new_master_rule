@@ -1,3 +1,7 @@
+/**
+ * Typst 0.14.2
+ */
+
 #import "style.typ": setup
 #import "title.typ": title-page
 #import "remaker.typ": remaker-page
