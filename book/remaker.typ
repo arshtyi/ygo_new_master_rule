@@ -19,7 +19,7 @@
     v(.8em)
     set par(justify: false, first-line-indent: (amount: 2em, all: true))
     [
-        本文档使用#Typst 重制了由#author 制作的#origin，并在其基础上补充了2020年的#link("https://www.yugioh-card.com/japan/howto/masterrule2020", "修订")。本文档将尽可能少地改动原文档的内容并尽量完善之。
+        本文档使用#Typst 重制了由#author 制作的#origin，主要是修改了样式并在其基础上补充了2020年的#link("https://www.yugioh-card.com/japan/howto/masterrule2020", "修订")。本文档将尽可能少地改动原文档的内容并尽量完善之。
 
         您可以前往#source 查看本项目源代码。如果发现错误，也欢迎提交给作者。
     ]
