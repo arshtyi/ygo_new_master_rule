@@ -1,0 +1,95 @@
+name: Build and Deploy PDF
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Fontist and install fonts
+        uses: fontist/setup-fontist@v2
+
+      - name: Install fonts
+        run: fontist install "IBM Plex Serif" "Source Han Serif SC" "Noto Serif CJK SC" "IBM Plex Mono" --newest -a -h
+
+      - name: Set up Typst
+        uses: typst-community/setup-typst@v5
+
+      - name: Compile PDF
+        run: |
+          mkdir -p _site
+          typst compile book/book.typ _site/ygo-new-master-rule.pdf --font-path ~/.fontist/fonts
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Create Pages index
+        run: |
+          cat > _site/index.html <<'HTML'
+          <!doctype html>
+          <html lang="zh-CN">
+            <head>
+              <meta charset="utf-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1">
+              <title>游戏王新大师规则</title>
+              <style>
+                html,
+                body {
+                  width: 100%;
+                  height: 100%;
+                  margin: 0;
+                }
+
+                iframe {
+                  width: 100%;
+                  height: 100%;
+                  border: 0;
+                }
+              </style>
+            </head>
+            <body>
+              <iframe
+                src="ygo-new-master-rule.pdf"
+                title="游戏王新大师规则 PDF"
+              >
+                <a href="ygo-new-master-rule.pdf">打开 PDF</a>
+              </iframe>
+            </body>
+          </html>
+          HTML
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
